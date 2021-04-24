@@ -45,7 +45,7 @@ class GlobalController extends Controller
             }
         }
     }
-     public function nombre($nombres,$apellidos){
+    public function nombre($nombres,$apellidos){
         //
     }
 }
