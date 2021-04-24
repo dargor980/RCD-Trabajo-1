@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 
 class GlobalController extends Controller
 {
-    public function rut($rut){
+    public function rut(Request $request){
+        $get = $request->input();
+        $rut = $get["rut"];
         $rut = str_replace(".","",$rut);
         $arr=strrev($rut);
         $arr= str_split($arr);
@@ -45,7 +47,28 @@ class GlobalController extends Controller
             }
         }
     }
-    public function nombre($nombres,$apellidos){
-        //
+    public function nombre(Request $request){
+        $get = $request->input();
+        $nombres = $get["nombres"];
+        $apellidos = $get["apellidos"];
+        $nombre_explode = explode(" ", $nombres);
+        $apellidos_explode = explode(" ", $apellidos);
+        $count_nombres = count($nombre_explode);
+        $count_apellidos = count($apellidos_explode);
+        $response_final = array();
+        $response_nombres = array();
+        $response_apellidos = array();
+        if($count_apellidos > 2){
+            echo "Cantidad de apellidos no valida";
+        }else {
+            for($aux=0;$aux < $count_nombres;$aux++){
+                array_push($response_nombres,$nombre_explode[$aux]);
+            }
+            for($aux=0;$aux < $count_apellidos;$aux++){
+                array_push($response_apellidos,$apellidos_explode[$aux]);
+            }
+            array_push($response_final,$response_nombres,$response_apellidos);
+            return $response_final;
+        }
     }
 }
