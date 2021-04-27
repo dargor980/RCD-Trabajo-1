@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="../bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../bootstrap-5.0.0-beta3-dist/js/bootstrap.bundle.js"></script>
+    <script src="../assets/js/jquery_3_6.js"></script>
     <title>Cliente</title>
 
 </head>
 
 <body>
-
     <div class="container">
         <div class="dropdown my-3">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -21,38 +21,98 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li>
-                    <a class="dropdown-item" href="#">Api Rest</a>
+                    <a class="dropdown-item" type="button" href="#" id="btnRest">Api Rest</a>
                 </li>
                 <li>
-                    <a class="dropdown-item" href="#">Api Soap</a>
+                    <a class="dropdown-item" type="button" href="#" id="btnSoap">Api Soap</a>
                 </li>
             </ul>
         </div>
-        <div class="row my-5" style="padding: 10% 0 0 0;">
-            <div class="col-2"></div>
-            <div class="col-8">
+        <div class="row mt-5" style="padding: 15% 0 0 0;">
+            <div class="col-8" id="test">
                 <h6 style="color: aliceblue;">Ingrese un rut sin dígito verificador:</h6>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Rut</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Ejemplo: 12345678">
-                    <button class="btn btn-success">Consultar DV</button>
+                    <input type="text" id="sendRut"  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Ejemplo: 12345678">
+                    <button class="btn btn-success"  type="button" id="btnDv">Consultar DV</button>
                 </div>
             </div>
-            <div class="col-2"></div>
-            <div class="col-2"></div>
+
+            <div class="col-4">
+                <div class="card text-white mb-3 mt-3 " style="background-color: #0d6efd6e;">
+                    <div class="card-body" >
+                      <p class="card-text" >El dígito verificador es: <strong id="cardDV"></strong> </p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
             <div class="col-8">
                 <h6 style="color: aliceblue;">Ingrese Nombres y Apellidos: </h6>
                 <div class="input-group">
                     <span class="input-group-text">Nombres y Apellidos</span>
-                    <input type="text" aria-label="First name" class="form-control" placeholder="Nombres">
-                    <input type="text" aria-label="Last name" class="form-control" placeholder="Apellidos">
-                    <button class="btn btn-success">Enviar Consulta</button>
+                    <input type="text" id="sendFn"  aria-label="First name" class="form-control" placeholder="Nombres">
+                    <input type="text" id="sendLn"  aria-label="Last name" class="form-control" placeholder="Apellidos">
+                    <button class="btn btn-success"  type="button" id="btnName">Enviar Consulta</button>
                 </div>
             </div>
-            <div class="col-2"></div>
+            <div class="col-4">
+                <div class="card text-white mb-3 mt-3 " style="background-color: #0d6efd6e;">
+                    <div class="card-body" >
+                        <strong >Nombres</strong><br>
+                            <p id="cardName"></p>
+                        <strong >Apellidos</strong><br>
+                            <p id="cardLast"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
         </div>
     </div>
 </body>
 
+<script>
+    $(document).ready(function() {
+        $("#btnDv").click(function(){
+            var rut = $("#sendRut").val();
+            var request = {
+                rut: rut
+            }
+            $.ajax({
+                type: "POST",    
+                url:'http://localhost/redes/RCD-Trabajo-1/Webservices/public/api/rut',
+                data:JSON.stringify(request),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data){
+                    $("#cardDV").html(data);
+                    //$("#test").html(data);
+                }
+            });
+        });
+        $("#btnName").click(function(){
+            var nombres = $("#sendFn").val();
+            var apellidos = $("#sendLn").val();
+            var request = {
+                nombres:nombres,
+                apellidos:apellidos
+            }
+            $.ajax({
+                type: "POST",    
+                url:'http://localhost/redes/RCD-Trabajo-1/Webservices/public/api/nombrecompleto',
+                data:JSON.stringify(request),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data){
+                    var nom = data[0];
+                    var app = data[1];
+                    $("#cardName").html(nom);
+                    $("#cardLast").html(app);
+                }
+            });
+
+        });
+    });
+</script>
 
 </html>

@@ -15,9 +15,9 @@ use App\Http\Controllers\GlobalController;
 |
 */
 
-Route::get('/rut', [Globalcontroller::class, 'rut']);
+Route::post('/rut', [GlobalController::class, 'rut']);
 
-Route::get('/nombrecompleto', [Globalcontroller::class, 'nombre']);
+Route::post('/nombrecompleto', [GlobalController::class, 'nombre']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

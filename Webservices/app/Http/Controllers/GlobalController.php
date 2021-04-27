@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 class GlobalController extends Controller
 {
     public function rut(Request $request){
-        $get = $request->input();
-        $rut = $get["rut"];
+        $gets = $request->json()->all();
+        $rut = $gets["rut"];
         $rut = str_replace(".","",$rut);
         $arr=strrev($rut);
         $arr= str_split($arr);
@@ -31,26 +31,26 @@ class GlobalController extends Controller
         $suma %=11;
         $suma=11- $suma;
         if($suma==10){
-            echo "K";
+            return "K";
         }
         else{
             if($suma == 11){
-                echo "0";
+                return "0";
             }
             else{
                 if($suma<10){
-                    echo $suma;
+                    return $suma;
                 }
                 else{
-                    echo "rut inválido";
+                    return "rut inválido";
                 }
             }
         }
     }
     public function nombre(Request $request){
-        $get = $request->input();
-        $nombres = $get["nombres"];
-        $apellidos = $get["apellidos"];
+        $gets = $request->json()->all();
+        $nombres = $gets["nombres"];
+        $apellidos = $gets["apellidos"];
         $nombre_explode = explode(" ", $nombres);
         $apellidos_explode = explode(" ", $apellidos);
         $count_nombres = count($nombre_explode);
@@ -58,8 +58,8 @@ class GlobalController extends Controller
         $response_final = array();
         $response_nombres = array();
         $response_apellidos = array();
-        if($count_apellidos > 2){
-            echo "Cantidad de apellidos no valida";
+        if($count_apellidos < 2){
+            return "Cantidad de apellidos no valida";
         }else {
             for($aux=0;$aux < $count_nombres;$aux++){
                 array_push($response_nombres,$nombre_explode[$aux]);
