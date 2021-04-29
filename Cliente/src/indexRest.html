@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../bootstrap-5.0.0-beta3-dist/js/bootstrap.bundle.js"></script>
+    <script src="../assets/js/jquery_3_6.js"></script>
+    <title>Cliente</title>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mt-3" style="text-align: center;">Api Rest</h1>
+        <div class="row mt-5" style="padding: 15% 0 0 0;">
+            <div class="col-8" id="test">
+                <h6 style="color: aliceblue;">Ingrese un rut sin dígito verificador:</h6>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Rut</span>
+                    <input type="number" id="sendRut" minlength="7" maxlength="9" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Ejemplo: 12345678">
+                    <button class="btn btn-success" type="button" id="btnDv">Consultar DV</button>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card text-white mb-3 mt-3 " style="background-color: #0d6efd6e;">
+                    <div class="card-body" >
+                      <p class="card-text" >El dígito verificador es: <strong id="cardDV"></strong> </p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="col-8">
+                <h6 style="color: aliceblue;">Ingrese Nombres y Apellidos: </h6>
+                <div class="input-group">
+                    <span class="input-group-text">Nombres y Apellidos</span>
+                    <input type="text" id="sendFn"  aria-label="First name" class="form-control" placeholder="Nombres">
+                    <input type="text" id="sendLn"  aria-label="Last name" class="form-control" placeholder="Apellidos">
+                    <button class="btn btn-success"  type="button" id="btnName">Enviar Consulta</button>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card text-white mb-3 mt-3 " style="background-color: #0d6efd6e;">
+                    <div class="card-body" >
+                        <strong >Nombres</strong><br>
+                            <p id="cardName"></p>
+                        <strong >Apellidos</strong><br>
+                            <p id="cardLast"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</body>
+
+<script>
+    $(document).ready(function() {
+        $("#btnDv").click(function(){
+            var rut = $("#sendRut").val();
+            var request = {
+                rut: rut
+            }
+            alert(rut);
+            $.ajax({
+                type: "POST",    
+                url:'http://localhost/redes/RCD-Trabajo-1/Webservices/Rest/public/api/rut',
+                data:JSON.stringify(request),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data){
+                    if(data == 10){
+                        $("#cardDV").html("K");
+                    }else if(data == 11){
+                        $("#cardDV").html("0");
+                    }else if(data < 10 ){
+                        $("#cardDV").html(data);
+                    }else if(data == 9999){
+                        $("#cardDV").html("Rut inválido");
+                    }
+                    //$("#test").html(data);
+                }
+            });
+        });
+        $("#btnName").click(function(){
+            var nombres = $("#sendFn").val();
+            var apellidos = $("#sendLn").val();
+            var request = {
+                nombres:nombres,
+                apellidos:apellidos
+            }
+            $.ajax({
+                type: "POST",    
+                url:'http://localhost/redes/RCD-Trabajo-1/Webservices/Rest/public/api/nombrecompleto',
+                data:JSON.stringify(request),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data){
+                    var nom = data[0];
+                    var nombres = " ";
+                    var app = data[1];
+                    var apellidos = " ";
+                    if(data == false){
+
+                    }
+                    for (let index = 0; index < nom.length; index++) {
+                        nombres = nombres + nom[index] + "<br>";
+                    }
+                    $("#cardName").html(nombres);
+                    app.forEach(element => {
+                        apellidos = apellidos + element + "<br>";
+                    });
+                    $("#cardLast").html(apellidos);
+                }
+            });
+        });
+    });
+</script>
+
+</html>

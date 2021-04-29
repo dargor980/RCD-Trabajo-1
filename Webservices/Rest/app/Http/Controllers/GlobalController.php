@@ -10,39 +10,45 @@ class GlobalController extends Controller
         $gets = $request->json()->all();
         $rut = $gets["rut"];
         $rut = str_replace(".","",$rut);
-        $arr=strrev($rut);
-        $arr= str_split($arr);
-        $digits= count($arr);
-        $serie=2;
-        $suma=0;
-        $c=0;
-        while($c<8){
-            if($serie<=7){
-                $suma+=$arr[$c]*$serie;
-                $serie++;
-            }
-            else{
-                $serie=2;
-                $suma+=$arr[$c]*$serie;
-                $serie++;
-            }
-            $c++;
-        }
-        $suma %=11;
-        $suma=11- $suma;
-        if($suma==10){
-            return "K";
-        }
-        else{
-            if($suma == 11){
-                return "0";
-            }
-            else{
-                if($suma<10){
-                    return $suma;
+        if(strlen($rut) < 7 ){
+            return 9999;
+        }else{
+            $arr=strrev($rut);
+            $arr= str_split($arr);
+            $digits= count($arr);
+            $serie=2;
+            $suma=0;
+            $c=0;
+            while($c<8){
+                if($serie<=7){
+                    $suma+=$arr[$c]*$serie;
+                    $serie++;
                 }
                 else{
-                    return "rut inválido";
+                    $serie=2;
+                    $suma+=$arr[$c]*$serie;
+                    $serie++;
+                }
+                $c++;
+            }
+            $suma %=11;
+            $suma=11- $suma;
+            if($suma==10){
+                $k = 10;
+                return $k;
+            }
+            else{
+                if($suma == 11){
+                    // 0
+                    return 11;
+                }
+                else{
+                    if($suma<10){
+                        return $suma;
+                    }
+                    else{
+                        return 9999;
+                    }
                 }
             }
         }
@@ -58,8 +64,8 @@ class GlobalController extends Controller
         $response_final = array();
         $response_nombres = array();
         $response_apellidos = array();
-        if($count_apellidos < 2){
-            return "Cantidad de apellidos no valida";
+        if($count_apellidos > 2){
+            return false;
         }else {
             for($aux=0;$aux < $count_nombres;$aux++){
                 array_push($response_nombres,$nombre_explode[$aux]);
