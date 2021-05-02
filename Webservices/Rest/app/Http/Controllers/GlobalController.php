@@ -55,26 +55,19 @@ class GlobalController extends Controller
     }
     public function nombre(Request $request){
         $gets = $request->json()->all();
-        $nombres = $gets["nombres"];
-        $apellidos = $gets["apellidos"];
-        $nombre_explode = explode(" ", $nombres);
-        $apellidos_explode = explode(" ", $apellidos);
+        $nombre = $gets["fullName"];
+        $nombre_explode = explode(" ", $nombre);
         $count_nombres = count($nombre_explode);
-        $count_apellidos = count($apellidos_explode);
-        $response_final = array();
-        $response_nombres = array();
-        $response_apellidos = array();
-        if($count_apellidos > 2){
-            return false;
-        }else {
-            for($aux=0;$aux < $count_nombres;$aux++){
-                array_push($response_nombres,$nombre_explode[$aux]);
-            }
-            for($aux=0;$aux < $count_apellidos;$aux++){
-                array_push($response_apellidos,$apellidos_explode[$aux]);
-            }
-            array_push($response_final,$response_nombres,$response_apellidos);
-            return $response_final;
+        $apellidos = array();
+        array_push($apellidos,$nombre_explode[$count_nombres-2]);
+        array_push($apellidos,$nombre_explode[$count_nombres-1]);
+        $nombres = array();
+        for ($i=0; $i < $count_nombres-2 ; $i++) { 
+            array_push($nombres,$nombre_explode[$i]);
         }
+        $final = array();
+        array_push($final,$nombres);
+        array_push($final,$apellidos);
+        return $final;
     }
 }

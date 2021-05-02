@@ -33,13 +33,12 @@
                 </div>
             </div>
             <hr>
-
+            
             <div class="col-8">
                 <h6 style="color: aliceblue;">Ingrese Nombres y Apellidos: </h6>
                 <div class="input-group">
                     <span class="input-group-text">Nombres y Apellidos</span>
-                    <input type="text" id="sendFn"  aria-label="First name" class="form-control" placeholder="Nombres">
-                    <input type="text" id="sendLn"  aria-label="Last name" class="form-control" placeholder="Apellidos">
+                    <input type="text" id="sendFn"  aria-label="Full name" class="form-control" placeholder="Nombre completo">
                     <button class="btn btn-success"  type="button" id="btnName">Enviar Consulta</button>
                 </div>
             </div>
@@ -82,16 +81,14 @@
                     }else if(data == 9999){
                         $("#cardDV").html("Rut inválido");
                     }
-                    //$("#test").html(data);
+                    $("#test").html(data);
                 }
             });
         });
         $("#btnName").click(function(){
-            var nombres = $("#sendFn").val();
-            var apellidos = $("#sendLn").val();
+            var fullName = $("#sendFn").val();
             var request = {
-                nombres:nombres,
-                apellidos:apellidos
+                fullName:fullName
             }
             $.ajax({
                 type: "POST",    
@@ -100,16 +97,18 @@
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (data){
+                    //$("#cardName").html(data);
+                    if(data == false){
+                        var error = "datos inválidos";
+                        $("#cardName").html(error);
+                    }
                     var nom = data[0];
                     var nombres = " ";
                     var app = data[1];
                     var apellidos = " ";
-                    if(data == false){
-
-                    }
-                    for (let index = 0; index < nom.length; index++) {
-                        nombres = nombres + nom[index] + "<br>";
-                    }
+                    nom.forEach(element => {
+                        nombres = nombres + element + "<br>";
+                    });
                     $("#cardName").html(nombres);
                     app.forEach(element => {
                         apellidos = apellidos + element + "<br>";
