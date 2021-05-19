@@ -27,28 +27,28 @@
             </div>
             <div class="col-4">
                 <div class="card text-white mb-3 mt-3 " style="background-color: #0d6efd6e;">
-                    <div class="card-body" >
-                      <p class="card-text" >El dígito verificador es: <strong id="cardDV"></strong> </p>
+                    <div class="card-body">
+                        <p class="card-text">El dígito verificador es: <strong id="cardDV"></strong> </p>
                     </div>
                 </div>
             </div>
             <hr>
-            
+
             <div class="col-8">
                 <h6 style="color: aliceblue;">Ingrese Nombres y Apellidos: </h6>
                 <div class="input-group">
                     <span class="input-group-text">Nombres y Apellidos</span>
-                    <input type="text" id="sendFn"  aria-label="Full name" class="form-control" placeholder="Nombre completo">
-                    <button class="btn btn-success"  type="button" id="btnName">Enviar Consulta</button>
+                    <input type="text" id="sendFn" aria-label="Full name" class="form-control" placeholder="Nombre completo">
+                    <button class="btn btn-success" type="button" id="btnName">Enviar Consulta</button>
                 </div>
             </div>
             <div class="col-4">
                 <div class="card text-white mb-3 mt-3 " style="background-color: #0d6efd6e;">
-                    <div class="card-body" >
-                        <strong >Nombres</strong><br>
-                            <p id="cardName"></p>
-                        <strong >Apellidos</strong><br>
-                            <p id="cardLast"></p>
+                    <div class="card-body">
+                        <strong>Nombres</strong><br>
+                        <p id="cardName"></p>
+                        <strong>Apellidos</strong><br>
+                        <p id="cardLast"></p>
                     </div>
                 </div>
             </div>
@@ -59,46 +59,45 @@
 
 <script>
     $(document).ready(function() {
-        $("#btnDv").click(function(){
+        $("#btnDv").click(function() {
             var rut = $("#sendRut").val();
             var request = {
-                rut: rut
-            }
-            alert(rut);
+                    rut: rut
+                }
+                //alert(rut);
             $.ajax({
-                type: "POST",    
-                url:'http://localhost/redes/RCD-Trabajo-1/Webservices/Rest/public/api/rut',
-                data:JSON.stringify(request),
+                type: "POST",
+                url: 'http://localhost/RCD-Trabajo-1/Webservices/Rest/public/api/rut',
+                data: JSON.stringify(request),
                 dataType: 'json',
                 contentType: 'application/json',
-                success: function (data){
-                    if(data == 10){
+                success: function(data) {
+                    if (data == 10) {
                         $("#cardDV").html("K");
-                    }else if(data == 11){
+                    } else if (data == 11) {
                         $("#cardDV").html("0");
-                    }else if(data < 10 ){
+                    } else if (data < 10) {
                         $("#cardDV").html(data);
-                    }else if(data == 9999){
+                    } else if (data == 9999) {
                         $("#cardDV").html("Rut inválido");
                     }
-                    $("#test").html(data);
+                    //$("#test").html(data);
                 }
             });
         });
-        $("#btnName").click(function(){
+        $("#btnName").click(function() {
             var fullName = $("#sendFn").val();
             var request = {
-                fullName:fullName
+                fullName: fullName
             }
             $.ajax({
-                type: "POST",    
-                url:'http://localhost/redes/RCD-Trabajo-1/Webservices/Rest/public/api/nombrecompleto',
-                data:JSON.stringify(request),
+                type: "POST",
+                url: 'http://localhost/RCD-Trabajo-1/Webservices/Rest/public/api/nombrecompleto',
+                data: JSON.stringify(request),
                 dataType: 'json',
                 contentType: 'application/json',
-                success: function (data){
-                    //$("#cardName").html(data);
-                    if(data == false){
+                success: function(data) {
+                    if (data == false) {
                         var error = "datos inválidos";
                         $("#cardName").html(error);
                     }
