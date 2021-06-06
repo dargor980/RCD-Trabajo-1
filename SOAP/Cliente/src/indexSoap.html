@@ -83,7 +83,6 @@
         });
         $("#btnName").click(function() {
             var nombres = $("#sendFn").val();
-            alert(nombres);
             var data = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws/\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <ws:splitnombre>\r\n         <nombre_ok>" + nombres + "</nombre_ok>\r\n      </ws:splitnombre>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>\r\n\r\n";
 
             var xhr = new XMLHttpRequest();
