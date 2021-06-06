@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status='on'>
+    <Properties>
+        <Property name='registro'>SOAP_RCD/test/registro.log</Property>
+    </Properties>
+    <Appenders>
+        <Console name='Console' target='SYSTEM_OUT'>
+            <PatternLayout pattern='%m%n'/>
+        </Console>
+        <File name='File' fileName='registro.log'>
+            <PatternLayout>
+                <Pattern>%d %-5p %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level='debug'>
+            <AppenderRef ref='File'/>
+            <AppenderRef ref='Console'/>
+        </Root>
+    </Loggers>
+</Configuration>

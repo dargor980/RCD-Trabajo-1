@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../bootstrap-5.0.0-beta3-dist/js/bootstrap.bundle.js"></script>
     <script src="../assets/js/jquery_3_6.js"></script>
+    <script src="../assets/js/sweet_alert.js"></script>
     <title>Cliente</title>
 
 </head>
@@ -21,7 +22,7 @@
                 <h6 style="color: aliceblue;">Ingrese un rut sin dígito verificador:</h6>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Rut</span>
-                    <input type="number" id="sendRut" minlength="7" maxlength="9" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Ejemplo: 12345678">
+                    <input type="number" id="sendRut" min="7" max="10" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Ejemplo: 12345678">
                     <button class="btn btn-success" type="button" id="btnDv">Consultar DV</button>
                 </div>
             </div>
@@ -67,7 +68,7 @@
                 //alert(rut);
             $.ajax({
                 type: "POST",
-                url: 'http://localhost/RCD-Trabajo-1/Webservices/Rest/public/api/rut',
+                url: 'http://localhost/REST/Rest/public/api/rut',
                 data: JSON.stringify(request),
                 dataType: 'json',
                 contentType: 'application/json',
@@ -79,12 +80,11 @@
                     } else if (data < 10) {
                         $("#cardDV").html(data);
                     } else if (data == 9999) {
-                        $("#cardDV").html("Rut inválido");
-                    } else if (data == "Error") {
-                        $("#cardDV").html(data);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Rut inválido.'
+                        })
                     }
-
-                    //$("#test").html(data);
                 }
             });
         });
@@ -95,27 +95,31 @@
             }
             $.ajax({
                 type: "POST",
-                url: 'http://localhost/RCD-Trabajo-1/Webservices/Rest/public/api/nombrecompleto',
+                url: 'http://localhost/REST/Rest/public/api/nombrecompleto',
                 data: JSON.stringify(request),
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function(data) {
-                    if (data == false) {
-                        var error = "datos inválidos";
-                        $("#cardName").html(error);
+                    if (data == 9999) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Datos mal ingresados.'
+                        })
+
+                    } else {
+                        var nom = data[0];
+                        var nombres = " ";
+                        var app = data[1];
+                        var apellidos = " ";
+                        nom.forEach(element => {
+                            nombres = nombres + element + "<br>";
+                        });
+                        $("#cardName").html(nombres);
+                        app.forEach(element => {
+                            apellidos = apellidos + element + "<br>";
+                        });
+                        $("#cardLast").html(apellidos);
                     }
-                    var nom = data[0];
-                    var nombres = " ";
-                    var app = data[1];
-                    var apellidos = " ";
-                    nom.forEach(element => {
-                        nombres = nombres + element + "<br>";
-                    });
-                    $("#cardName").html(nombres);
-                    app.forEach(element => {
-                        apellidos = apellidos + element + "<br>";
-                    });
-                    $("#cardLast").html(apellidos);
                 }
             });
         });

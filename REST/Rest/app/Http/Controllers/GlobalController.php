@@ -38,12 +38,12 @@ class GlobalController extends Controller
                 $suma %=11;
                 $suma=11- $suma;
                 if($suma==10){
-                    $k = 10;
-                    return $k;
+                    Log::info("Retorna K");
+                    return 10;
                 }
                 else{
                     if($suma == 11){
-                        // 0
+                        Log::info("Retorna 0");
                         return 11;
                     }
                     else{
@@ -59,8 +59,7 @@ class GlobalController extends Controller
             }
         } catch (\Exception $exc) {
             Log::error($exc->getMessage());    
-        }
-        
+        }        
     }
     public function nombre(Request $request){
         try {
@@ -69,21 +68,32 @@ class GlobalController extends Controller
             $nombre = $gets["fullName"];
             $nombre_explode = explode(" ", $nombre);
             $count_nombres = count($nombre_explode);
-            $apellidos = array();
-            array_push($apellidos,$nombre_explode[$count_nombres-2]);
-            array_push($apellidos,$nombre_explode[$count_nombres-1]);
-            $nombres = array();
-            for ($i=0; $i < $count_nombres-2 ; $i++) { 
-                array_push($nombres,$nombre_explode[$i]);
+            if($count_nombres <= 2){
+                return 9999;
+            }else{
+
+                $apellidos = array();
+                array_push($apellidos,$nombre_explode[$count_nombres-2]);
+                array_push($apellidos,$nombre_explode[$count_nombres-1]);
+                for ($i=0; $i < count($apellidos); $i++) { 
+                    $apellidos[$i] = ucfirst(strtolower($apellidos[$i]));
+                }
+                $nombres = array();
+                for ($i=0; $i < $count_nombres-2 ; $i++) { 
+                    array_push($nombres,$nombre_explode[$i]);
+                }
+                for ($j=0; $j < count($nombres); $j++) { 
+                    $nombres[$j] = ucfirst(strtolower($nombres[$j]));
+                }
+                $final = array();
+                array_push($final,$nombres);
+                array_push($final,$apellidos);
+                Log::info("Finaliza funcion nombre");
+                return $final;
             }
-            $final = array();
-            array_push($final,$nombres);
-            array_push($final,$apellidos);
-            return $final;
         } catch (\Exception $exc) {
             Log::error($exc->getMessage());
             return "Error";   
-        }
-        
+        }        
     }
 }
